@@ -54,24 +54,24 @@ Toutes les réponses sont au format JSON, avec des codes HTTP adaptés.
 | `GET` | `/health` | Vérifier que l'API répond | `200` |
 | `GET` | `/api/tickets` | Récupérer les tickets | `200` |
 | `POST` | `/api/tickets` | Créer un ticket | `201`, `400` |
-| `PATCH` | `/api/tickets/:id` | Modifier le statut d'un ticket | `200`, `400`, `404` |
+| `PATCH` | `/api/tickets/:id` | Modifier le statut d'un ticket | `200`, `404`, `422` |
 
-Les données reçues sont validées côté API : titre et description non vides, statut limité aux trois valeurs autorisées.
+Les données reçues sont validées côté API : titre et description non vides, statut limité à `Ouvert`, `En cours` ou `Terminé`. Un nouveau ticket reçoit le statut `Ouvert` et sa date de création automatiquement.
 
 ## Modèle de données
 
 ```sql
 CREATE TABLE tickets (
-    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    titre       VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
-    statut      VARCHAR(20) NOT NULL DEFAULT 'Ouvert'
-                CHECK (statut IN ('Ouvert', 'En cours', 'Résolu')),
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    title       VARCHAR(100) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    status      VARCHAR(20) NOT NULL DEFAULT 'Ouvert'
+                CHECK (status IN ('Ouvert', 'En cours', 'Terminé')),
+    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-La contrainte `CHECK` garantit que le statut reste dans les valeurs autorisées, même en cas d'appel direct à la base.
+La contrainte `CHECK` garantit que le statut reste dans les valeurs autorisées, même en cas d'appel direct à la base. La date de création est définie par la base.
 
 ## Variables d'environnement
 

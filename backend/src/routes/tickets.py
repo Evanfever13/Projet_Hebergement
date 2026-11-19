@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Response, status
 
-from src.schemas.tickets import TicketResponse
+from src.schemas.tickets import TicketResponse, TicketStatusUpdate
 from src.services.tickets import (
     create_ticket,
     delete_ticket,
     get_ticket,
     list_tickets,
-    update_ticket,
+    update_ticket_status,
 )
 
 router = APIRouter(prefix="/api/tickets", tags=["Tickets"])
@@ -40,11 +40,21 @@ router.add_api_route(
 
 router.add_api_route(
     path="/{ticket_id}",
-    endpoint=update_ticket,
+    endpoint=update_ticket_status,
+    methods=["PATCH"],
+    response_model=TicketResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Modifier le statut d'un ticket",
+)
+
+router.add_api_route(
+    path="/{ticket_id}",
+    endpoint=update_ticket_status,
     methods=["PUT"],
     response_model=TicketResponse,
     status_code=status.HTTP_200_OK,
-    summary="Mettre à jour un ticket",
+    summary="Modifier le statut d'un ticket",
+    include_in_schema=False,
 )
 
 router.add_api_route(
