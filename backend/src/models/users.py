@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from backend.database import Base
+from database import Base
 
 if TYPE_CHECKING:
-    from backend.src.models.tickets import Ticket, TicketPermission
+    from src.models.tickets import Ticket, TicketPermission
 
 
 class Users(Base):

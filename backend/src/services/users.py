@@ -12,9 +12,9 @@ from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.src.models.users import Users as UserModel
-from backend.src.schemas.users import UserCreate
+from database import get_db
+from src.models.users import Users as UserModel
+from src.schemas.users import UserCreate
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:

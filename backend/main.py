@@ -3,9 +3,9 @@ import os
 
 from fastapi import FastAPI
 
-from backend.database import Base, engine
-from backend.src.routes.tickets import router as tickets_router
-from backend.src.routes.users import router2 as auth_router, users_router
+from database import Base, engine
+from src.routes.tickets import router as tickets_router
+from src.routes.users import router2 as auth_router, users_router
 
 if (os.getenv("VERCEL") == "1" or os.getenv("RENDER") == "true") and not os.getenv("SECRET_KEY"):
     raise RuntimeError("SECRET_KEY must be configured in production.")

@@ -1,11 +1,11 @@
 from fastapi import Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.src.models.tickets import Ticket, TicketPermission
-from backend.src.models.users import Users
-from backend.src.schemas.tickets import TicketCreate
-from backend.src.services.users import get_current_user
+from database import get_db
+from src.models.tickets import Ticket, TicketPermission
+from src.models.users import Users
+from src.schemas.tickets import TicketCreate
+from src.services.users import get_current_user
 
 
 def list_tickets(
