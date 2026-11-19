@@ -7,9 +7,9 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 database_url = os.getenv("DATABASE_URL")
 if not database_url:
-    if os.getenv("VERCEL") == "1":
+    if os.getenv("VERCEL") == "1" or os.getenv("RENDER") == "true":
         raise RuntimeError(
-            "DATABASE_URL is required on Vercel. Configure a managed PostgreSQL database."
+            "DATABASE_URL is required in production. Configure a managed database."
         )
     database_url = "sqlite:///./tickets.db"
 
@@ -17,6 +17,8 @@ if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql+psycopg://", 1)
 elif database_url.startswith("postgresql://"):
     database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+elif database_url.startswith("mysql://"):
+    database_url = database_url.replace("mysql://", "mysql+pymysql://", 1)
 
 engine_options = {"pool_pre_ping": True}
 if database_url.startswith("sqlite"):

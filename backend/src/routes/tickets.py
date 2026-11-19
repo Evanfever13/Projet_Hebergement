@@ -1,13 +1,23 @@
 from fastapi import APIRouter, Response, status
 
-from backend.src.schemas.tickets import TicketResponse
-from backend.src.services.tickets import (
-    create_ticket,
-    delete_ticket,
-    get_ticket,
-    list_tickets,
-    update_ticket,
-)
+try:
+    from src.schemas.tickets import TicketResponse
+    from src.services.tickets import (
+        create_ticket,
+        delete_ticket,
+        get_ticket,
+        list_tickets,
+        update_ticket,
+    )
+except ModuleNotFoundError:
+    from backend.src.schemas.tickets import TicketResponse
+    from backend.src.services.tickets import (
+        create_ticket,
+        delete_ticket,
+        get_ticket,
+        list_tickets,
+        update_ticket,
+    )
 
 router = APIRouter(prefix="/api/tickets", tags=["Tickets"])
 

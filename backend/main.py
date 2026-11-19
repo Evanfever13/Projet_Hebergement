@@ -4,9 +4,14 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from database import Base, engine
-from backend.src.models.tickets import Ticket
-from backend.src.routes.tickets import router as tickets_router
+try:
+    from database import Base, engine
+    from src.models.tickets import Ticket
+    from src.routes.tickets import router as tickets_router
+except ModuleNotFoundError:
+    from backend.database import Base, engine
+    from backend.src.models.tickets import Ticket
+    from backend.src.routes.tickets import router as tickets_router
 
 
 @asynccontextmanager

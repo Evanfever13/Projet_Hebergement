@@ -1,9 +1,14 @@
 from fastapi import Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from database import get_db
-from backend.src.models.tickets import Ticket
-from backend.src.schemas.tickets import TicketCreate, TicketStatusUpdate
+try:
+    from database import get_db
+    from src.models.tickets import Ticket
+    from src.schemas.tickets import TicketCreate, TicketStatusUpdate
+except ModuleNotFoundError:
+    from backend.database import get_db
+    from backend.src.models.tickets import Ticket
+    from backend.src.schemas.tickets import TicketCreate, TicketStatusUpdate
 
 
 def list_tickets(db: Session = Depends(get_db)) -> list[Ticket]:

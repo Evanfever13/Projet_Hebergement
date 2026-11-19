@@ -3,7 +3,10 @@ from datetime import datetime
 from sqlalchemy import CheckConstraint, DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from database import Base
+try:
+    from database import Base
+except ModuleNotFoundError:
+    from backend.database import Base
 
 
 class Ticket(Base):
