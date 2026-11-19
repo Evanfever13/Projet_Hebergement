@@ -114,47 +114,88 @@ async function loadTickets() {
 
             const status = document.createElement("p");
             status.textContent = `Statut : ${ticket.status}`;
+            item.append(title, description, createdAt, status);
 
-            const editButton = document.createElement("button");
-            editButton.className = "button button-secondary";
-            editButton.type = "button";
-            editButton.textContent = "Modifier le statut";
+            if (currentUser?.role === "admin") {
+                const editButton = document.createElement("button");
+                editButton.className = "button button-secondary";
+                editButton.type = "button";
+                editButton.textContent = "Modifier le statut";
 
-            const editForm = document.createElement("form");
-            editForm.className = "ticket-status-form";
-            editForm.hidden = true;
+                const editForm = document.createElement("form");
+                editForm.className = "ticket-status-form";
+                editForm.hidden = true;
 
-            const statusLabel = document.createElement("label");
-            statusLabel.htmlFor = `ticket-status-${ticket.id}`;
-            statusLabel.textContent = "Nouveau statut";
+                const statusLabel = document.createElement("label");
+                statusLabel.htmlFor = `ticket-status-${ticket.id}`;
+                statusLabel.textContent = "Nouveau statut";
 
-            const statusSelect = document.createElement("select");
-            statusSelect.id = statusLabel.htmlFor;
-            statusSelect.name = "status";
-            for (const value of ["Ouvert", "En cours", "Terminé"]) {
-                const option = document.createElement("option");
-                option.value = value;
-                option.textContent = value;
-                option.selected = value === ticket.status;
-                statusSelect.append(option);
+                const statusSelect = document.createElement("select");
+                statusSelect.id = statusLabel.htmlFor;
+                statusSelect.name = "status";
+                for (const value of ["Ouvert", "En cours", "Terminé"]) {
+                    const option = document.createElement("option");
+                    option.value = value;
+                    option.textContent = value;
+                    option.selected = value === ticket.status;
+                    statusSelect.append(option);
+                }
+
+                const saveButton = document.createElement("button");
+                saveButton.className = "button button-primary";
+                saveButton.type = "submit";
+                saveButton.textContent = "Enregistrer";
+
+                const cancelButton = document.createElement("button");
+                cancelButton.className = "button button-secondary";
+                cancelButton.type = "button";
+                cancelButton.textContent = "Annuler";
+
+                const editMessage = document.createElement("p");
+                editMessage.className = "ticket-edit-message";
+                editMessage.setAttribute("role", "status");
+
+                editForm.append(statusLabel, statusSelect, saveButton, cancelButton, editMessage);
+                item.append(editButton, editForm);
+
+                editButton.addEventListener("click", () => {
+                    statusSelect.value = ticket.status;
+                    editButton.hidden = true;
+                    editForm.hidden = false;
+                    statusSelect.focus();
+                });
+
+                cancelButton.addEventListener("click", () => {
+                    editForm.hidden = true;
+                    editButton.hidden = false;
+                    editMessage.textContent = "";
+                    delete editMessage.dataset.state;
+                });
+
+                editForm.addEventListener("submit", async (event) => {
+                    event.preventDefault();
+                    saveButton.disabled = true;
+                    editMessage.textContent = "";
+                    delete editMessage.dataset.state;
+
+                    try {
+                        const updatedTicket = await requestTickets(`/api/tickets/${ticket.id}`, {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ status: statusSelect.value }),
+                        });
+                        ticket.status = updatedTicket.status;
+                        status.textContent = `Statut : ${updatedTicket.status}`;
+                        editForm.hidden = true;
+                        editButton.hidden = false;
+                    } catch (error) {
+                        editMessage.textContent = error.message;
+                        editMessage.dataset.state = "error";
+                    } finally {
+                        saveButton.disabled = false;
+                    }
+                });
             }
-
-            const saveButton = document.createElement("button");
-            saveButton.className = "button button-primary";
-            saveButton.type = "submit";
-            saveButton.textContent = "Enregistrer";
-
-            const cancelButton = document.createElement("button");
-            cancelButton.className = "button button-secondary";
-            cancelButton.type = "button";
-            cancelButton.textContent = "Annuler";
-
-            const editMessage = document.createElement("p");
-            editMessage.className = "ticket-edit-message";
-            editMessage.setAttribute("role", "status");
-
-            editForm.append(statusLabel, statusSelect, saveButton, cancelButton, editMessage);
-            item.append(title, description, createdAt, status, editButton, editForm);
 
             const cardMessage = document.createElement("p");
             cardMessage.className = "ticket-edit-message";
@@ -185,44 +226,6 @@ async function loadTickets() {
                     }
                 });
             }
-
-            editButton.addEventListener("click", () => {
-                statusSelect.value = ticket.status;
-                editButton.hidden = true;
-                editForm.hidden = false;
-                statusSelect.focus();
-            });
-
-            cancelButton.addEventListener("click", () => {
-                editForm.hidden = true;
-                editButton.hidden = false;
-                editMessage.textContent = "";
-                delete editMessage.dataset.state;
-            });
-
-            editForm.addEventListener("submit", async (event) => {
-                event.preventDefault();
-                saveButton.disabled = true;
-                editMessage.textContent = "";
-                delete editMessage.dataset.state;
-
-                try {
-                    const updatedTicket = await requestTickets(`/api/tickets/${ticket.id}`, {
-                        method: "PATCH",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ status: statusSelect.value }),
-                    });
-                    ticket.status = updatedTicket.status;
-                    status.textContent = `Statut : ${updatedTicket.status}`;
-                    editForm.hidden = true;
-                    editButton.hidden = false;
-                } catch (error) {
-                    editMessage.textContent = error.message;
-                    editMessage.dataset.state = "error";
-                } finally {
-                    saveButton.disabled = false;
-                }
-            });
 
             ticketList.append(item);
         }

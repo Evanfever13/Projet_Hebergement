@@ -40,6 +40,7 @@ def create_ticket(
 def update_ticket_status(
     ticket_id: int,
     ticket_data: TicketStatusUpdate,
+    _: Users = Depends(require_admin),
     db: Session = Depends(get_db),
 ) -> Ticket:
     ticket = get_ticket(ticket_id, db)
