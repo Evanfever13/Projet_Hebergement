@@ -10,7 +10,7 @@ Projet réalisé dans le cadre du TP **Mise en production & Hébergement** (YNOV
 
 | Élément | URL |
 |---|---|
-| Frontend (Vercel) | `bonnelatomate-git-main-projet-10.vercel.app` |
+| Frontend (Vercel) | `bonnelatomate.vercel.app` |
 | API (Scalingo) | `https://bonnelatomate.osc-fr1.scalingo.io/` |
 
 > Remplacer les valeurs entre chevrons par les URL réelles avant la restitution (le domaine exact dépend de la région choisie sur Scalingo).
