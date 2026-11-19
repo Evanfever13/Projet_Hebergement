@@ -35,6 +35,3 @@ app.include_router(tickets_router)
 @app.get("/api/health", tags=["Health"])
 def home() -> dict[str, str]:
     return {"message": "BonnelaTomate API", "documentation": "/api/docs"}
-
-
-app.frontend("/", directory="frontend/templates")
