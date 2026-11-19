@@ -25,7 +25,10 @@ app = FastAPI(
 )
 
 frontend_url = os.getenv("FRONTEND_URL")
-allowed_origins = ["http://localhost:3000"]
+allowed_origins = [
+    "http://localhost:3000",
+    "https://bonnelatomate.vercel.app",
+]
 if frontend_url:
     allowed_origins.append(frontend_url.rstrip("/"))
 
