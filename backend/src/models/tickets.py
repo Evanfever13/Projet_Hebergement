@@ -1,40 +1,26 @@
-from sqlalchemy import Boolean, ForeignKey, Integer, String, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import datetime
+
+from sqlalchemy import CheckConstraint, DateTime, String, func
+from sqlalchemy.orm import Mapped, mapped_column
 
 from database import Base
-from backend.src.models.users import Users
 
 
 class Ticket(Base):
     __tablename__ = "tickets"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('Ouvert', 'En cours', 'Résolu')",
+            name="tickets_status_check",
+        ),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=False)
-    time: Mapped[int] = mapped_column(Integer, nullable=False)
-    adopt: Mapped[int] = mapped_column(Integer, nullable=False)
-    owner_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="Ouvert")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
     )
-
-    owner: Mapped[Users] = relationship(back_populates="tickets")
-    permissions: Mapped[list["TicketPermission"]] = relationship(
-        back_populates="ticket", cascade="all, delete-orphan"
-    )
-
-
-class TicketPermission(Base):
-    __tablename__ = "ticket_permissions"
-    __table_args__ = (UniqueConstraint("ticket_id", "user_id"),)
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    ticket_id: Mapped[int] = mapped_column(
-        ForeignKey("tickets.id", ondelete="CASCADE"), nullable=False
-    )
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
-    )
-    can_edit: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-
-    ticket: Mapped[Ticket] = relationship(back_populates="permissions")
-    user: Mapped[Users] = relationship(back_populates="shared_ticket_permissions")

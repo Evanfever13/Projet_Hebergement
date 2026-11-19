@@ -7,6 +7,17 @@ const templatesPath = path.join(__dirname, 'templates');
 
 app.use(express.static(templatesPath));
 
+app.get('/config.js', (req, res) => {
+  const apiUrl = (
+    process.env.API_URL ||
+    process.env.VITE_API_URL ||
+    ''
+  ).replace(/\/+$/, '');
+
+  res.type('application/javascript');
+  res.send(`window.APP_CONFIG = Object.freeze({ apiUrl: ${JSON.stringify(apiUrl)} });`);
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(templatesPath, 'index.html'));
 });

@@ -17,7 +17,7 @@ router.add_api_route(
     methods=["GET"],
     response_model=list[TicketResponse],
     status_code=status.HTTP_200_OK,
-    summary="Lister les tickets de l'utilisateur connecté",
+    summary="Lister les tickets",
 )
 
 router.add_api_route(
@@ -41,7 +41,7 @@ router.add_api_route(
 router.add_api_route(
     path="/{ticket_id}",
     endpoint=update_ticket,
-    methods=["PUT"],
+    methods=["PATCH"],
     response_model=TicketResponse,
     status_code=status.HTTP_200_OK,
     summary="Mettre à jour un ticket",

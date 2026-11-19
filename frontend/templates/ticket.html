@@ -6,6 +6,7 @@
         <meta name="description" content="Créez et consultez vos tickets BonnelaTomate.">
         <title>Mes tickets | BonnelaTomate</title>
         <link rel="stylesheet" href="/styles.css">
+        <script src="/config.js" defer></script>
         <script src="/ticket.js" defer></script>
     </head>
     <body>
@@ -36,25 +37,8 @@
                     <textarea id="description" name="description" maxlength="500" rows="6" required
                         placeholder="Expliquez-nous votre situation (500 caractères maximum)."></textarea>
 
-                    <div class="form-row">
-                        <div>
-                            <label for="time">Temps estimé (minutes)</label>
-                            <input id="time" name="time" type="number" min="0" step="1" required value="0">
-                        </div>
-                        <div>
-                            <label for="adopt">Personnes concernées</label>
-                            <input id="adopt" name="adopt" type="number" min="0" step="1" required value="1">
-                        </div>
-                    </div>
-
-                    <label for="access-token">Jeton d'accès</label>
-                    <input id="access-token" name="access-token" type="password" autocomplete="off"
-                        placeholder="Collez votre jeton Bearer">
-                    <p class="field-help">Connectez-vous via <a href="/api/docs" target="_blank" rel="noreferrer">l'API</a>
-                        et collez votre jeton pour créer ou afficher vos tickets.</p>
-
                     <button class="button button-primary" type="submit">Envoyer le ticket</button>
-                    <button class="button button-secondary" id="load-tickets" type="button">Afficher mes tickets</button>
+                    <button class="button button-secondary" id="load-tickets" type="button">Afficher les tickets</button>
                     <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
                 </form>
 

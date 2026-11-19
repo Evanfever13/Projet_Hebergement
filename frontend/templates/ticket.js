@@ -1,15 +1,11 @@
 const form = document.querySelector("#ticket-form");
-const tokenInput = document.querySelector("#access-token");
 const formMessage = document.querySelector("#form-message");
 const ticketList = document.querySelector("#ticket-list");
 const ticketListMessage = document.querySelector("#ticket-list-message");
+const apiBaseUrl = (window.APP_CONFIG?.apiUrl || "").replace(/\/+$/, "");
 
-function getToken() {
-    const token = tokenInput.value.trim();
-    if (!token) {
-        throw new Error("Saisissez d'abord votre jeton d'accès.");
-    }
-    return token;
+function apiUrl(path) {
+    return `${apiBaseUrl}${path}`;
 }
 
 function setFormMessage(message, isError = false) {
@@ -18,10 +14,9 @@ function setFormMessage(message, isError = false) {
 }
 
 async function requestTickets(path, options = {}) {
-    const response = await fetch(path, {
+    const response = await fetch(apiUrl(path), {
         ...options,
         headers: {
-            Authorization: `Bearer ${getToken()}`,
             ...(options.headers || {}),
         },
     });
@@ -41,8 +36,6 @@ form.addEventListener("submit", async (event) => {
     const ticket = {
         title: formData.get("title").trim(),
         description: formData.get("description").trim(),
-        time: Number(formData.get("time")),
-        adopt: Number(formData.get("adopt")),
     };
 
     try {
@@ -52,8 +45,6 @@ form.addEventListener("submit", async (event) => {
             body: JSON.stringify(ticket),
         });
         form.reset();
-        document.querySelector("#time").value = "0";
-        document.querySelector("#adopt").value = "1";
         setFormMessage(`Ticket « ${createdTicket.title} » créé.`);
         await loadTickets();
     } catch (error) {
@@ -81,10 +72,49 @@ async function loadTickets() {
             title.textContent = ticket.title;
             const description = document.createElement("p");
             description.textContent = ticket.description;
-            const details = document.createElement("p");
-            details.textContent = `${ticket.time} min · ${ticket.adopt} personne(s)`;
+            const status = document.createElement("p");
+            status.textContent = `Statut : ${ticket.status}`;
+            const createdAt = document.createElement("p");
+            createdAt.textContent = `Créé le : ${new Date(ticket.created_at).toLocaleString("fr-FR")}`;
 
-            item.append(title, description, details);
+            const statusSelect = document.createElement("select");
+            statusSelect.setAttribute("aria-label", `Modifier le statut de ${ticket.title}`);
+            for (const value of ["Ouvert", "En cours", "Résolu"]) {
+                const option = document.createElement("option");
+                option.value = value;
+                option.textContent = value;
+                option.selected = value === ticket.status;
+                statusSelect.append(option);
+            }
+            statusSelect.addEventListener("change", async () => {
+                try {
+                    await requestTickets(`/api/tickets/${ticket.id}`, {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ status: statusSelect.value }),
+                    });
+                    await loadTickets();
+                } catch (error) {
+                    ticketListMessage.textContent = error.message;
+                }
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "button button-secondary";
+            deleteButton.textContent = "Supprimer";
+            deleteButton.addEventListener("click", async () => {
+                try {
+                    await requestTickets(`/api/tickets/${ticket.id}`, {
+                        method: "DELETE",
+                    });
+                    await loadTickets();
+                } catch (error) {
+                    ticketListMessage.textContent = error.message;
+                }
+            });
+
+            item.append(title, description, status, createdAt, statusSelect, deleteButton);
             ticketList.append(item);
         }
     } catch (error) {
@@ -93,3 +123,4 @@ async function loadTickets() {
 }
 
 document.querySelector("#load-tickets").addEventListener("click", loadTickets);
+loadTickets();
