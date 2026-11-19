@@ -15,15 +15,6 @@ Projet réalisé dans le cadre du TP **Mise en production & Hébergement** (YNOV
 
 > Remplacer les valeurs entre chevrons par les URL réelles avant la restitution (le domaine exact dépend de la région choisie sur Scalingo).
 
-## Équipe
-
-| Membre | Contribution |
-|---|---|
-| Prénom Nom | ex. frontend, formulaire de création |
-| Prénom Nom | ex. API et validation des données |
-| Prénom Nom | ex. base de données et connexion |
-| Prénom Nom | ex. déploiement Scalingo, documentation |
-
 ## Architecture
 
 L'application suit une architecture **trois tiers**, entièrement hébergée sur **Scalingo** (PaaS français). Le code est versionné sur GitHub.
