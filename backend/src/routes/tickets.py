@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response, status
 
-from src.schemas.tickets import TicketResponse, TicketStatusUpdate
+from src.schemas.tickets import TicketResponse
 from src.services.tickets import (
     create_ticket,
     delete_ticket,
