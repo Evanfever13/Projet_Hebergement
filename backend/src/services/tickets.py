@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from src.models.tickets import Ticket
-from src.schemas.tickets import TicketCreate
+from src.schemas.tickets import TicketCreate, TicketStatusUpdate
 
 
 def list_tickets(
@@ -35,14 +35,13 @@ def create_ticket(
     return ticket
 
 
-def update_ticket(
+def update_ticket_status(
     ticket_id: int,
-    ticket_data: TicketCreate,
+    ticket_data: TicketStatusUpdate,
     db: Session = Depends(get_db),
 ) -> Ticket:
     ticket = get_ticket(ticket_id, db)
-    for key, value in ticket_data.model_dump().items():
-        setattr(ticket, key, value)
+    ticket.status = ticket_data.status
     db.commit()
     db.refresh(ticket)
     return ticket

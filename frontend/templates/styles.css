@@ -253,6 +253,48 @@ nav a[aria-current="page"] {
     overflow-wrap: anywhere;
 }
 
+.ticket-card > .button {
+    margin-top: 12px;
+}
+
+.ticket-card > .button[hidden] {
+    display: none;
+}
+
+.ticket-status-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.ticket-status-form[hidden] {
+    display: none;
+}
+
+.ticket-status-form label {
+    font-weight: 700;
+}
+
+.ticket-status-form select {
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid #dce4dc;
+    border-radius: 9px;
+    background: #fff;
+    color: inherit;
+    font: inherit;
+}
+
+.ticket-status-form .ticket-edit-message {
+    flex-basis: 100%;
+}
+
+.ticket-edit-message[data-state="error"] {
+    color: #a33030;
+}
+
 .site-footer {
     padding: 24px;
     color: #718078;

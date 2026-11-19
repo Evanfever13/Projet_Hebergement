@@ -1,4 +1,9 @@
+from datetime import datetime
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field
+
+TicketStatus = Literal["Ouvert", "En cours", "Terminé"]
 
 
 class TicketCreate(BaseModel):
@@ -6,11 +11,15 @@ class TicketCreate(BaseModel):
 
     title: str = Field(min_length=1, max_length=100)
     description: str = Field(min_length=1, max_length=500)
-    time: int = Field(ge=0)
-    adopt: int = Field(ge=0)
+
+
+class TicketStatusUpdate(BaseModel):
+    status: TicketStatus
 
 
 class TicketResponse(TicketCreate):
     model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)
 
     id: int
+    status: TicketStatus
+    created_at: datetime
