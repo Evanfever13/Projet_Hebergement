@@ -2,6 +2,7 @@ const form = document.querySelector("#ticket-form");
 const formMessage = document.querySelector("#form-message");
 const ticketList = document.querySelector("#ticket-list");
 const ticketListMessage = document.querySelector("#ticket-list-message");
+const API_BASE_URL = "https://projet-hebergement.onrender.com";
 
 function setFormMessage(message, isError = false) {
     formMessage.textContent = message;
@@ -9,7 +10,7 @@ function setFormMessage(message, isError = false) {
 }
 
 async function requestTickets(path, options = {}) {
-    const response = await fetch(path, options);
+    const response = await fetch(`${API_BASE_URL}${path}`, options);
 
     if (!response.ok) {
         const body = await response.json().catch(() => ({}));
