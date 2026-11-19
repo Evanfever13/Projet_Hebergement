@@ -1,16 +1,7 @@
 const form = document.querySelector("#ticket-form");
-const tokenInput = document.querySelector("#access-token");
 const formMessage = document.querySelector("#form-message");
 const ticketList = document.querySelector("#ticket-list");
 const ticketListMessage = document.querySelector("#ticket-list-message");
-
-function getToken() {
-    const token = tokenInput.value.trim();
-    if (!token) {
-        throw new Error("Saisissez d'abord votre jeton d'accès.");
-    }
-    return token;
-}
 
 function setFormMessage(message, isError = false) {
     formMessage.textContent = message;
@@ -18,13 +9,7 @@ function setFormMessage(message, isError = false) {
 }
 
 async function requestTickets(path, options = {}) {
-    const response = await fetch(path, {
-        ...options,
-        headers: {
-            Authorization: `Bearer ${getToken()}`,
-            ...(options.headers || {}),
-        },
-    });
+    const response = await fetch(path, options);
 
     if (!response.ok) {
         const body = await response.json().catch(() => ({}));
@@ -68,7 +53,7 @@ async function loadTickets() {
     try {
         const tickets = await requestTickets("/api/tickets");
         if (tickets.length === 0) {
-            ticketListMessage.textContent = "Vous n'avez pas encore de ticket.";
+            ticketListMessage.textContent = "Aucun ticket pour le moment.";
             return;
         }
 

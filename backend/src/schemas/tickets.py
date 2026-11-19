@@ -14,4 +14,3 @@ class TicketResponse(TicketCreate):
     model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)
 
     id: int
-    owner_id: int

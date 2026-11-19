@@ -1,14 +1,10 @@
 from contextlib import asynccontextmanager
-import os
 
 from fastapi import FastAPI
 
 from database import Base, engine
-from src.routes.tickets import router as tickets_router
-from src.routes.users import router2 as auth_router, users_router
-
-if (os.getenv("VERCEL") == "1" or os.getenv("RENDER") == "true") and not os.getenv("SECRET_KEY"):
-    raise RuntimeError("SECRET_KEY must be configured in production.")
+from backend.src.models.tickets import Ticket
+from backend.src.routes.tickets import router as tickets_router
 
 
 @asynccontextmanager
@@ -19,15 +15,13 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="BonnelaTomate API",
-    description="API d'authentification et de gestion des tickets.",
+    description="API de gestion des tickets.",
     lifespan=lifespan,
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
 )
 
-app.include_router(auth_router)
-app.include_router(users_router)
 app.include_router(tickets_router)
 
 @app.get("/api/health", tags=["Health"])
