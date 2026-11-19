@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Connectez-vous ou créez un compte BonnelaTomate.">
+        <title>Connexion | BonnelaTomate</title>
+        <link rel="stylesheet" href="/styles.css">
+        <script src="/login.js" defer></script>
+    </head>
+    <body>
+        <header class="site-header">
+            <a class="brand" href="/" aria-label="BonnelaTomate, accueil">🍅 BonnelaTomate</a>
+            <nav aria-label="Navigation principale">
+                <a href="/">Accueil</a>
+                <a href="/login" aria-current="page">Connexion</a>
+            </nav>
+        </header>
+
+        <main class="page-shell">
+            <section class="page-heading">
+                <p class="eyebrow">Votre espace</p>
+                <h1>Connexion</h1>
+                <p>Connectez-vous pour consulter et gérer les tickets.</p>
+            </section>
+
+            <section class="panel auth-panel" aria-label="Authentification">
+                <div class="auth-tabs" role="tablist" aria-label="Mode d'authentification">
+                    <button class="button button-primary" id="login-tab" type="button"
+                        role="tab" aria-selected="true">Connexion</button>
+                    <button class="button button-secondary" id="register-tab" type="button"
+                        role="tab" aria-selected="false">Créer un compte</button>
+                </div>
+
+                <form id="login-form" class="auth-form">
+                    <label for="login-username">Nom d'utilisateur</label>
+                    <input id="login-username" name="username" type="text"
+                        autocomplete="username" required>
+
+                    <label for="login-password">Mot de passe</label>
+                    <input id="login-password" name="password" type="password"
+                        autocomplete="current-password" required>
+
+                    <button class="button button-primary" type="submit">Se connecter</button>
+                </form>
+
+                <form id="register-form" class="auth-form" hidden>
+                    <label for="register-username">Nom d'utilisateur</label>
+                    <input id="register-username" name="username" type="text"
+                        minlength="3" maxlength="30" autocomplete="username" required>
+
+                    <label for="register-email">Adresse e-mail</label>
+                    <input id="register-email" name="email" type="email"
+                        autocomplete="email" required>
+
+                    <label for="register-password">Mot de passe (8 caractères minimum)</label>
+                    <input id="register-password" name="password" type="password"
+                        minlength="8" maxlength="128" autocomplete="new-password" required>
+
+                    <button class="button button-primary" type="submit">Créer mon compte</button>
+                </form>
+
+                <p id="auth-message" class="form-message" role="status" aria-live="polite"></p>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>© BonnelaTomate — À votre écoute 🍅</p>
+        </footer>
+    </body>
+</html>

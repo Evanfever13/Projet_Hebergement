@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from src.models.tickets import Ticket
+from src.models.users import Users
 from src.schemas.tickets import TicketCreate, TicketStatusUpdate
+from src.services.users import require_admin
 
 
 def list_tickets(
@@ -49,6 +51,7 @@ def update_ticket_status(
 
 def delete_ticket(
     ticket_id: int,
+    _: Users = Depends(require_admin),
     db: Session = Depends(get_db),
 ) -> Response:
     ticket = get_ticket(ticket_id, db)

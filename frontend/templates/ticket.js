@@ -3,6 +3,9 @@ const formMessage = document.querySelector("#form-message");
 const ticketList = document.querySelector("#ticket-list");
 const ticketListMessage = document.querySelector("#ticket-list-message");
 const API_BASE_URL = "https://projet-hebergement.onrender.com";
+const accountName = document.querySelector("#account-name");
+const logoutButton = document.querySelector("#logout");
+let currentUser = null;
 
 function setFormMessage(message, isError = false) {
     formMessage.textContent = message;
@@ -10,7 +13,14 @@ function setFormMessage(message, isError = false) {
 }
 
 async function requestTickets(path, options = {}) {
-    const response = await fetch(`${API_BASE_URL}${path}`, options);
+    const token = sessionStorage.getItem("access_token");
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+        ...options,
+        headers: {
+            ...(options.headers || {}),
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+    });
 
     if (!response.ok) {
         const responseBody = await response.text();
@@ -38,6 +48,10 @@ async function requestTickets(path, options = {}) {
                 .filter(Boolean)
                 .join("; ")
             : detail;
+        if (response.status === 401) {
+            sessionStorage.removeItem("access_token");
+            window.location.replace("/login");
+        }
         throw new Error(
             typeof message === "string" && message
                 ? message
@@ -142,6 +156,36 @@ async function loadTickets() {
             editForm.append(statusLabel, statusSelect, saveButton, cancelButton, editMessage);
             item.append(title, description, createdAt, status, editButton, editForm);
 
+            const cardMessage = document.createElement("p");
+            cardMessage.className = "ticket-edit-message";
+            cardMessage.setAttribute("role", "status");
+            item.append(cardMessage);
+
+            if (currentUser?.role === "admin") {
+                const deleteButton = document.createElement("button");
+                deleteButton.className = "button button-danger";
+                deleteButton.type = "button";
+                deleteButton.textContent = "Supprimer le ticket";
+                item.append(deleteButton);
+                deleteButton.addEventListener("click", async () => {
+                    if (!window.confirm(`Supprimer le ticket « ${ticket.title} » ?`)) {
+                        return;
+                    }
+
+                    deleteButton.disabled = true;
+                    try {
+                        await requestTickets(`/api/tickets/${ticket.id}`, {
+                            method: "DELETE",
+                        });
+                        await loadTickets();
+                    } catch (error) {
+                        cardMessage.textContent = error.message;
+                        cardMessage.dataset.state = "error";
+                        deleteButton.disabled = false;
+                    }
+                });
+            }
+
             editButton.addEventListener("click", () => {
                 statusSelect.value = ticket.status;
                 editButton.hidden = true;
@@ -188,3 +232,25 @@ async function loadTickets() {
 }
 
 document.querySelector("#load-tickets").addEventListener("click", loadTickets);
+
+logoutButton.addEventListener("click", () => {
+    sessionStorage.removeItem("access_token");
+    window.location.replace("/login");
+});
+
+async function initializeTicketsPage() {
+    if (!sessionStorage.getItem("access_token")) {
+        window.location.replace("/login");
+        return;
+    }
+
+    try {
+        currentUser = await requestTickets("/api/auth/me");
+        accountName.textContent = currentUser.username;
+        await loadTickets();
+    } catch (error) {
+        ticketListMessage.textContent = error.message;
+    }
+}
+
+initializeTicketsPage();
