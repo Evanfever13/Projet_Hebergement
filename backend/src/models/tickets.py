@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from database import Base
+from backend.database import Base
 from backend.src.models.users import Users
 
 
