@@ -13,7 +13,7 @@ Projet réalisé dans le cadre du TP **Mise en production & Hébergement** (YNOV
 | Frontend (Vercel) | `bonnelatomate.vercel.app` |
 | API (Render) | `https://projet-hebergement.onrender.com/` |
 
-> Remplacer les valeurs entre chevrons par les URL réelles avant la restitution (le domaine exact dépend de la région choisie sur Scalingo).
+> Remplacer les valeurs entre chevrons par les URL réelles avant la restitution .
 
 ## Architecture
 
@@ -23,7 +23,7 @@ L'application suit une architecture **trois tiers**
 flowchart LR
     U[Utilisateur<br/>Navigateur] -->|HTTPS| F[Frontend<br/>App Vercel]
     F -->|HTTPS / JSON| B[Backend API<br/>App Render]
-    B -->|SQL| D[(MySql<br/>Addon Scalingo)]
+    B -->|SQL| D[(MySql)]
     G[GitHub<br/>branche main] -.->|push = redéploiement| F
     G -.->|push = redéploiement| B
 ```
