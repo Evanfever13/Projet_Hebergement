@@ -1,8 +1,8 @@
-# Gestion de tickets informatiques
+# Gestion de tickets informatiques pour Bonnelatomate
 
 Application web de suivi des demandes informatiques : les collaborateurs peuvent déclarer un incident, consulter les tickets existants et suivre leur résolution.
 
-Projet réalisé dans le cadre du TP **Mise en production & Hébergement** (YNOV, 18 et 19 novembre 2026).
+Projet réalisé dans le cadre du TP **Mise en production & Hébergement** (YNOV, 19 novembre 2026).
 
 > L'objectif du projet n'est pas l'interface, mais la compréhension du chemin qui mène du code source à un service utilisable en production : hébergement, déploiement, variables d'environnement, base de données et CI/CD.
 
@@ -30,14 +30,12 @@ flowchart LR
 
 | Tiers | Rôle | Technologie | Hébergement |
 |---|---|---|---|
-| Frontend | Interface utilisateur | `<à compléter : ex. React + Vite>` | Scalingo (app dédiée) |
-| Backend | API REST et logique métier | `<à compléter : ex. Node.js + Express>` | Scalingo (app dédiée) |
-| Base de données | Stockage persistant | PostgreSQL | Addon PostgreSQL Scalingo, rattaché à l'app backend |
+| Frontend | Interface utilisateur | Node.js | Vercel |
+| Backend | API REST et logique métier | Python | Render |
+| Base de données | Stockage persistant | MySql | tidbcloud |
 | Code source | Versionnement et déclencheur CI/CD | Git | GitHub |
 
-Choix d'hébergement : une seule plateforme pour les trois tiers simplifie la gestion des comptes, des variables d'environnement et des logs.
-
-Le frontend ne communique **jamais** directement avec la base de données : seul le backend y accède. L'addon PostgreSQL n'est rattaché qu'à l'application backend, et ses identifiants n'existent que dans les variables d'environnement de cette application.
+Le frontend ne communique **jamais** directement avec la base de données : seul le backend y accède. Les identifiants privilégiés de la base restent côté backend.
 
 ## Fonctionnalités
 
