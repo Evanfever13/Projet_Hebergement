@@ -135,7 +135,7 @@ Les étapes ci-dessous décrivent l'ordre suivi. Aucun secret n'est à renseigne
 ### 1. Base de données (Tidbcloud)
 
 1. Créer un projet Tidbcloud.
-2. Exécuter le script SQL du modèle de données (éditeur SQL de Supabase) pour créer la table `tickets`.
+2. Exécuter le script SQL du modèle de données pour créer la table `tickets`.
 3. Récupérer la chaîne de connexion adaptée à un backend hébergé (connexion poolée si Render ne supporte pas l'IPv6).
 
 ### 2. Backend (Render)
