@@ -2,8 +2,8 @@ from fastapi import Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from database import get_db
-from backend.src.models.tickets import Ticket
-from backend.src.schemas.tickets import TicketCreate
+from src.models.tickets import Ticket
+from src.schemas.tickets import TicketCreate
 
 
 def list_tickets(
