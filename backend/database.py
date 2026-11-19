@@ -9,7 +9,8 @@ database_url = os.getenv("DATABASE_URL")
 if not database_url:
     if os.getenv("VERCEL") == "1" or os.getenv("RENDER") == "true":
         raise RuntimeError(
-            "DATABASE_URL is required in production. Configure a managed database."
+            "La variable DATABASE_URL est obligatoire en production. "
+            "Configurez une base de données gérée."
         )
     database_url = "sqlite:///./tickets.db"
 

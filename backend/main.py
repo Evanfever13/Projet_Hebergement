@@ -4,20 +4,23 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from database import Base, engine
-from src.models.tickets import Ticket
+from database import Base, SessionLocal, engine
 from src.routes.tickets import router as tickets_router
+from src.routes.users import router as auth_router
+from src.services.users import ensure_admin_user
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     Base.metadata.create_all(bind=engine)
+    with SessionLocal() as db:
+        ensure_admin_user(db)
     yield
 
 
 app = FastAPI(
     title="BonnelaTomate API",
-    description="API de gestion des tickets.",
+    description="API de gestion des tickets avec authentification et rôles.",
     lifespan=lifespan,
     docs_url="/api/docs",
     redoc_url="/api/redoc",
@@ -39,6 +42,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router)
 app.include_router(tickets_router)
 
 @app.get("/api/health", tags=["Health"])

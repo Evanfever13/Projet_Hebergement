@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Depends, Response, status
 
 from src.schemas.tickets import TicketResponse
+from src.services.users import get_current_user
 from src.services.tickets import (
     create_ticket,
     delete_ticket,
@@ -9,7 +10,11 @@ from src.services.tickets import (
     update_ticket_status,
 )
 
-router = APIRouter(prefix="/api/tickets", tags=["Tickets"])
+router = APIRouter(
+    prefix="/api/tickets",
+    tags=["Tickets"],
+    dependencies=[Depends(get_current_user)],
+)
 
 router.add_api_route(
     path="",

@@ -52,11 +52,15 @@ Toutes les réponses sont au format JSON, avec des codes HTTP adaptés.
 | Méthode | Route | Fonction | Codes de retour |
 |---|---|---|---|
 | `GET` | `/health` | Vérifier que l'API répond | `200` |
+| `POST` | `/api/auth/register` | Créer un compte utilisateur | `201`, `409`, `422` |
+| `POST` | `/api/auth/login` | Se connecter et obtenir un JWT | `200`, `401` |
+| `GET` | `/api/auth/me` | Récupérer le compte connecté | `200`, `401` |
 | `GET` | `/api/tickets` | Récupérer les tickets | `200` |
 | `POST` | `/api/tickets` | Créer un ticket | `201`, `400` |
-| `PATCH` | `/api/tickets/:id` | Modifier le statut d'un ticket | `200`, `400`, `404` |
+| `PATCH` | `/api/tickets/:id` | Modifier le statut d'un ticket | `200`, `404`, `422` |
+| `DELETE` | `/api/tickets/:id` | Supprimer un ticket (admin uniquement) | `204`, `401`, `403`, `404` |
 
-Les données reçues sont validées côté API : titre et description non vides, statut limité aux trois valeurs autorisées.
+L'inscription publique crée uniquement des comptes `user`. Les routes tickets nécessitent un jeton `Bearer`; seul un compte `admin` peut supprimer un ticket. Les mots de passe sont hachés côté serveur. Les données reçues sont validées côté API : titre et description non vides, statut limité à `Ouvert`, `En cours` ou `Terminé`. Un nouveau ticket reçoit le statut `Ouvert` et sa date de création automatiquement.
 
 ## Modèle de données
 
@@ -75,4 +79,4 @@ La contrainte `CHECK` garantit que le statut reste dans les valeurs autorisées,
 
 ## Variables d'environnement
 
-Aucun secret n'est versionné dans le dépôt. Un fichier `.env.example` liste les variables attendues ; le fichier `.env` est ignoré par Git.
+Aucun secret n'est versionné dans le dépôt. Render génère `SECRET_KEY`; renseigner également `ADMIN_USERNAME`, `ADMIN_EMAIL` et `ADMIN_PASSWORD` dans les variables du service backend pour créer le compte administrateur initial. Ces valeurs ne doivent pas être ajoutées au dépôt.

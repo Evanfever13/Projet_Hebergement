@@ -15,6 +15,10 @@ app.get('/ticket', (req, res) => {
   res.sendFile(path.join(templatesPath, 'ticket.html'));
 });
 
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(templatesPath, 'login.html'));
+});
+
 if (require.main === module) {
   app.listen(port, () => {
     console.log(`Le serveur tourne sur le port ${port}`);
