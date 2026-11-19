@@ -1,4 +1,4 @@
-# Gestion de tickets informatiques pour Bonnelatommate
+# Gestion de tickets informatiques pour Bonnelatomate
 
 Application web de suivi des demandes informatiques : les collaborateurs peuvent déclarer un incident, consulter les tickets existants et suivre leur résolution.
 
