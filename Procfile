@@ -1,1 +1,1 @@
-web: bin/bonnelatomate
+web: npm start
