@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 import os
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from database import Base, engine
 from backend.src.models.tickets import Ticket, TicketPermission
@@ -28,6 +29,24 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
 )
 
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv("FRONTEND_URL", "").split(",")
+    if origin.strip()
+]
+allowed_origins.extend([
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+])
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=list(dict.fromkeys(allowed_origins)),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(tickets_router)
@@ -35,6 +54,3 @@ app.include_router(tickets_router)
 @app.get("/api/health", tags=["Health"])
 def home() -> dict[str, str]:
     return {"message": "BonnelaTomate API", "documentation": "/api/docs"}
-
-
-app.frontend("/", directory="frontend/templates")
