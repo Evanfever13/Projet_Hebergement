@@ -27,3 +27,8 @@ app.include_router(tickets_router)
 @app.get("/api/health", tags=["Health"])
 def home() -> dict[str, str]:
     return {"message": "BonnelaTomate API", "documentation": "/api/docs"}
+
+
+@app.get("/health", include_in_schema=False)
+def health_alias() -> dict[str, str]:
+    return {"status": "ok"}
