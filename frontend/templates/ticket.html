@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Créez et consultez vos tickets BonnelaTomate.">
-        <title>Mes tickets | BonnelaTomate</title>
+        <meta name="description" content="Créez et consultez les tickets BonnelaTomate.">
+        <title>Tickets | BonnelaTomate</title>
         <link rel="stylesheet" href="/styles.css">
         <script src="/ticket.js" defer></script>
     </head>
@@ -13,7 +13,7 @@
             <a class="brand" href="/" aria-label="BonnelaTomate, accueil">🍅 BonnelaTomate</a>
             <nav aria-label="Navigation principale">
                 <a href="/">Accueil</a>
-                <a href="/ticket" aria-current="page">Mes tickets</a>
+                <a href="/ticket" aria-current="page">Tickets</a>
                 <a href="/#contact">Contact</a>
             </nav>
         </header>
@@ -47,20 +47,14 @@
                         </div>
                     </div>
 
-                    <label for="access-token">Jeton d'accès</label>
-                    <input id="access-token" name="access-token" type="password" autocomplete="off"
-                        placeholder="Collez votre jeton Bearer">
-                    <p class="field-help">Connectez-vous via <a href="/api/docs" target="_blank" rel="noreferrer">l'API</a>
-                        et collez votre jeton pour créer ou afficher vos tickets.</p>
-
                     <button class="button button-primary" type="submit">Envoyer le ticket</button>
-                    <button class="button button-secondary" id="load-tickets" type="button">Afficher mes tickets</button>
+                    <button class="button button-secondary" id="load-tickets" type="button">Afficher les tickets</button>
                     <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
                 </form>
 
                 <section class="panel ticket-list-panel" aria-labelledby="tickets-heading">
-                    <h2 id="tickets-heading">Mes tickets</h2>
-                    <p id="ticket-list-message" class="muted">Vos tickets apparaîtront ici.</p>
+                    <h2 id="tickets-heading">Tickets</h2>
+                    <p id="ticket-list-message" class="muted">Les tickets apparaîtront ici.</p>
                     <ul id="ticket-list" class="ticket-list"></ul>
                 </section>
             </section>
