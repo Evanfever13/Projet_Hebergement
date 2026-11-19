@@ -13,8 +13,36 @@ async function requestTickets(path, options = {}) {
     const response = await fetch(`${API_BASE_URL}${path}`, options);
 
     if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        throw new Error(body.detail || `La requête a échoué (${response.status}).`);
+        const responseBody = await response.text();
+        let detail;
+        try {
+            detail = JSON.parse(responseBody).detail;
+        } catch {
+            detail = null;
+        }
+
+        const message = Array.isArray(detail)
+            ? detail
+                .map((error) => {
+                    if (typeof error === "string") {
+                        return error;
+                    }
+                    if (typeof error?.msg !== "string") {
+                        return "";
+                    }
+                    const location = Array.isArray(error.loc)
+                        ? error.loc.filter((part) => part !== "body").join(".")
+                        : "";
+                    return location ? `${location}: ${error.msg}` : error.msg;
+                })
+                .filter(Boolean)
+                .join("; ")
+            : detail;
+        throw new Error(
+            typeof message === "string" && message
+                ? message
+                : `La requête a échoué (${response.status}).`,
+        );
     }
     return response.status === 204 ? null : response.json();
 }
