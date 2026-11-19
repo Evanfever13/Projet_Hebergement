@@ -3,8 +3,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from database import Base, engine
-from backend.src.models.tickets import Ticket
-from backend.src.routes.tickets import router as tickets_router
+from src.models.tickets import Ticket
+from src.routes.tickets import router as tickets_router
 
 
 @asynccontextmanager
