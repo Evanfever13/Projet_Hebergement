@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 
-from backend.src.models.users import Users
-from backend.src.schemas.users import UserResponse
-from backend.src.services.users import get_current_user, login, register
-from backend.src.schemas.users import Token
+from src.models.users import Users
+from src.schemas.users import UserResponse
+from src.services.users import get_current_user, login, register
+from src.schemas.users import Token
 
 # on initialise nos routes
 router2 = APIRouter(prefix="/api/auth", tags=["Users"])
