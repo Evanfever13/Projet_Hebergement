@@ -12,14 +12,14 @@ from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from database import get_db
+from backend.database import get_db
 from backend.src.models.users import Users as UserModel
 from backend.src.schemas.users import UserCreate
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
-    if os.environ.get("VERCEL") == "1":
-        raise RuntimeError("SECRET_KEY must be configured in the Vercel project settings.")
+    if os.environ.get("VERCEL") == "1" or os.environ.get("RENDER") == "true":
+        raise RuntimeError("SECRET_KEY must be configured in production.")
     SECRET_KEY = "local-dev-secret-change-before-deployment"
 ALGORITHM = "HS256"
 

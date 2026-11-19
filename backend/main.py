@@ -3,14 +3,12 @@ import os
 
 from fastapi import FastAPI
 
-from database import Base, engine
-from backend.src.models.tickets import Ticket, TicketPermission
-from backend.src.models.users import Users
+from backend.database import Base, engine
 from backend.src.routes.tickets import router as tickets_router
 from backend.src.routes.users import router2 as auth_router, users_router
 
-if os.getenv("VERCEL") == "1" and not os.getenv("SECRET_KEY"):
-    raise RuntimeError("SECRET_KEY must be configured in the Vercel project settings.")
+if (os.getenv("VERCEL") == "1" or os.getenv("RENDER") == "true") and not os.getenv("SECRET_KEY"):
+    raise RuntimeError("SECRET_KEY must be configured in production.")
 
 
 @asynccontextmanager
@@ -35,3 +33,8 @@ app.include_router(tickets_router)
 @app.get("/api/health", tags=["Health"])
 def home() -> dict[str, str]:
     return {"message": "BonnelaTomate API", "documentation": "/api/docs"}
+
+
+@app.get("/health", include_in_schema=False)
+def health_alias() -> dict[str, str]:
+    return {"status": "ok"}
