@@ -80,3 +80,7 @@ La contrainte `CHECK` garantit que le statut reste dans les valeurs autorisées,
 ## Variables d'environnement
 
 Aucun secret n'est versionné dans le dépôt. Render génère `SECRET_KEY`; renseigner également `ADMIN_USERNAME`, `ADMIN_EMAIL` et `ADMIN_PASSWORD` dans les variables du service backend pour créer le compte administrateur initial. Ces valeurs ne doivent pas être ajoutées au dépôt.
+
+## Compte administrateur
+
+Un compte administrateur peut modifier le statut des tickets et/ou les supprimer. Pour obtenir un accès administrateur, contactez-moi via GitHub ou sur Discord : `th3yt00kmynam3`.
