@@ -1,5 +1,4 @@
 const form = document.querySelector("#ticket-form");
-const tokenInput = document.querySelector("#access-token");
 const formMessage = document.querySelector("#form-message");
 const ticketList = document.querySelector("#ticket-list");
 const ticketListMessage = document.querySelector("#ticket-list-message");
