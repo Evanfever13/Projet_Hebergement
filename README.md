@@ -17,7 +17,7 @@ Projet réalisé dans le cadre du TP **Mise en production & Hébergement** (YNOV
 
 ## Architecture
 
-L'application suit une architecture **trois tiers**, entièrement hébergée sur **Scalingo** (PaaS français). Le code est versionné sur GitHub.
+L'application suit une architecture **trois tiers**
 
 ```mermaid
 flowchart LR
